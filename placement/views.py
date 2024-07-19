@@ -3,9 +3,10 @@ from django.contrib.auth import login
 from django.contrib.auth.models import auth
 from .forms import UserForm, StudentProfileForm, CompanyProfileForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView
-from django.urls import reverse_lazy
+
 from .models import *
+from django.contrib import messages
+
 # Create your views here.
 def index(request):
     return render(request,'index.html')
@@ -15,6 +16,28 @@ def logout(request):
     auth.logout(request)
     return redirect('/')
 
+def login_user(request):
+    if request.method=='POST':
+        username=request.POST['username']
+        password=request.POST['password']
+
+        user=auth.authenticate(username=username,password=password)   #checks if the user already registered in database
+
+        if user is not None:    #if user exists
+            auth.login(request,user)
+            if StudentProfile.objects.filter(user=user).exists():
+             return redirect('student_dashboard')
+            elif CompanyProfile.objects.filter(user=user).exists():
+             return redirect('company_dashboard')
+            else:
+             return redirect('index')  # Default redirection if user type is not identified
+            
+        else:
+            messages.info(request,'Invalid credentials')
+            return redirect('login_user')
+    else:
+        return render(request,'login.html')
+    
 def stu_register(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST)
@@ -49,18 +72,6 @@ def comp_register(request):
     return render(request, 'companyregister.html', {'user_form': user_form, 'profile_form': profile_form})
     
 
-class CustomLoginView(LoginView):
-    template_name = 'login.html'
-
-    def get_success_url(self):
-        user = self.request.user
-        if StudentProfile.objects.filter(user=user).exists():
-            return reverse_lazy('index')
-        elif CompanyProfile.objects.filter(user=user).exists():
-            return reverse_lazy('index')
-        else:
-            return reverse_lazy('index')  # Default redirection if user type is not identified
-        
 def student_dashboard(request):
     return render(request,'studentdashboard.html')
 
