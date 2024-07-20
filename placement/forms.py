@@ -65,6 +65,24 @@ class StudentProfileForm(forms.ModelForm):
     
    
 class CompanyProfileForm(forms.ModelForm):
+    hr_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"HR name", "class":"form-control"}), label="")
+    hr_phn = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"HR phone no", "class":"form-control"}), label="")
+    headquarters = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Headquarters", "class":"form-control"}), label="")
+    desc = forms.CharField(required=False,widget=forms.Textarea(attrs={
+            "placeholder": "Description",
+            "class": "form-control",
+            "rows": 3
+        }),
+        label=""
+    )
     class Meta:
         model = CompanyProfile
-        fields = ( 'hr_name', 'hr_phn', 'headquarters')
+        fields = ( 'hr_name', 'hr_phn', 'headquarters','type_of_company','desc','logo')
+
+    def __init__(self, *args, **kwargs):
+        super(CompanyProfileForm, self).__init__(*args, **kwargs)
+        
+        # Customize the label and attributes for a specific field
+        self.fields['type_of_company'].label = 'Company type'
+        self.fields['type_of_company'].widget.attrs.update({'class': 'form-select'})
+        self.fields['type_of_company'].label_tag = '<label  class="form-label">%s</label>' % ( self.fields['type_of_company'].label)

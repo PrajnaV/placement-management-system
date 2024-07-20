@@ -1,17 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Company Registration</title>
-</head>
-<body>
+{% extends 'basic.html' %}
+{% block css%}
+.card{
+    width:80%;
+    margin:auto;
+    padding:40px;
+    box-shadow:3px 2px 4px 2px rgba(0,0,0,0.35);
+}
+{% endblock %}
+{% block body %}
+<div class="container">
+    <br>
+    <div class="card">
     <h2>Company Registration</h2>
-    <form method="post">
+    <br>
+    <form method="post"enctype="multipart/form-data">
         {% csrf_token %}
-        {% if form.errors %}
+        {% if user_form.errors or profile_form.errors %}
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
                   Your Form Has Errors
-                  {% for field in form %}
+                  {% for field in user_form %}
+                      {% if field.errors %}
+                          {{ field.errors }}
+                      {% endif %}
+                  {% endfor %}
+                  {% for field in profile_form %}
                       {% if field.errors %}
                           {{ field.errors }}
                       {% endif %}
@@ -22,7 +34,13 @@
         
         {{ user_form.as_p }}
         {{ profile_form.as_p }}
-        <button type="submit">Register</button>
+        <div class="d-grid ">
+        <button type="submit" class="btn btn-primary">Register</button>
+    </div>
     </form>
-</body>
-</html>
+</div>
+<br>
+<br>
+</div>
+{% endblock %}
+

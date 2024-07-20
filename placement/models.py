@@ -36,10 +36,18 @@ class StudentProfile(models.Model):
     
 
 class CompanyProfile(models.Model):
+    type_choices =(
+        ('service','service based'),
+        ('product','product based')
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    email = models.EmailField(max_length=200,null=True)
     hr_name = models.CharField(max_length=30)
     hr_phn = models.CharField(max_length=10)
     headquarters = models.CharField(max_length=30)
+    type_of_company = models.CharField(blank=True,choices=type_choices) 
+    desc = models.TextField(blank=True)
+    logo = models.ImageField(upload_to='company',default='blank_user.png')
 
     def __str__(self):
         return self.user.username

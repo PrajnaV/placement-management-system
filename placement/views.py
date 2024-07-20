@@ -11,7 +11,7 @@ from django.contrib import messages
 def index(request):
     return render(request,'index.html')
 
-@login_required(login_url='login')     
+@login_required(login_url='login_user')     
 def logout(request):
     auth.logout(request)
     return redirect('/')
@@ -49,7 +49,7 @@ def stu_register(request):
             profile.email = user.email
             profile.save()
             login(request, user)
-            return redirect('index')
+            return redirect('student_dashboard')
     else:
         user_form = UserForm()
         profile_form = StudentProfileForm()
@@ -59,22 +59,24 @@ def stu_register(request):
 def comp_register(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST)
-        profile_form = CompanyProfileForm(request.POST)
+        profile_form = CompanyProfileForm(request.POST,request.FILES)
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
             profile = profile_form.save(commit=False)
             profile.user = user
+            profile.email = user.email
             profile.save()
             login(request, user)
-            return redirect('index')
+            return redirect('company_dashboard')
     else:
         user_form = UserForm()
         profile_form = CompanyProfileForm()
     return render(request, 'companyregister.html', {'user_form': user_form, 'profile_form': profile_form})
     
-
+@login_required(login_url='login_user')
 def student_dashboard(request):
     return render(request,'studentdashboard.html')
 
+@login_required(login_url='login_user')
 def company_dashboard(request):
     return render(request,'companydashboard.html')
