@@ -46,6 +46,7 @@ def stu_register(request):
             user = user_form.save()
             profile = profile_form.save(commit=False)
             profile.user = user
+            profile.email = user.email
             profile.save()
             login(request, user)
             return redirect('index')
