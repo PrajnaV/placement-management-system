@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator,MinValueValidator
 
 class StudentProfile(models.Model):
     branch_choices = (
@@ -20,15 +21,15 @@ class StudentProfile(models.Model):
         ('mtech','M.Tech'),
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    email = models.EmailField()
+    email = models.EmailField(max_length=200,null=True)
     phone_number = models.CharField(max_length=10)
-    branch = models.CharField(blank=False, choices=branch_choices)
-    gender=models.CharField(blank=False, choices=gender,max_length=10)
-    cgpa = models.FloatField()
-    degree = models.CharField(blank=False,choices=degree_options)
+    branch = models.CharField(blank=True, choices=branch_choices)
+    gender=models.CharField(blank=True, choices=gender,max_length=10)
+    cgpa = models.FloatField(validators=[MinValueValidator(0),MaxValueValidator(10)],blank=False,help_text='*required')
+    
     skills = models.TextField(blank=True)
     bio = models.TextField(blank=True)
-    profileimg = models.ImageField(upload_to='images',default='blank_user.png')
+    profileimg = models.ImageField(upload_to='student',default='blank_user.png')
 
     def __str__(self):
         return self.user.username
