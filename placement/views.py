@@ -49,7 +49,7 @@ def stu_register(request):
             profile.email = user.email
             profile.save()
             login(request, user)
-            return redirect('student_dashboard')
+            return redirect('student_dashboard') #here I have assumed that username is unique for each user
     else:
         user_form = UserForm()
         profile_form = StudentProfileForm()
@@ -76,6 +76,24 @@ def comp_register(request):
 @login_required(login_url='login_user')
 def student_dashboard(request):
     return render(request,'studentdashboard.html')
+
+@login_required(login_url='login_user')
+def student_profile_view(request):
+    user_object = request.user 
+    user_profile = StudentProfile.objects.get(user=user_object)
+    return render(request,'studentprofile.html',{'user_profile':user_profile})
+
+@login_required(login_url='login_user')
+def update_studentprofile(request):
+    user_object = request.user 
+    current_record = StudentProfile.objects.get(user=user_object)
+    form = StudentProfileForm(request.POST or None, instance=current_record)  #uses addrecordform to update where the fields of the form will be 
+                                                                          #already filled with current instance values
+    if form.is_valid():
+        form.save()
+        messages.success(request, "Updated successfully !")
+        return redirect('update_studentprofile')
+    return render(request,'update.html',{'form':form})
 
 @login_required(login_url='login_user')
 def company_dashboard(request):

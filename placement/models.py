@@ -4,13 +4,13 @@ from django.core.validators import MaxValueValidator,MinValueValidator
 
 class StudentProfile(models.Model):
     branch_choices = (
-        ('it', 'Information technology'),
-        ('me', 'Mechanical'),
-        ('cv', 'Civil'),
-        ('eee', 'Electronics and Electrical'),
-        ('ece', 'Electronics and Communication'),
-        ('ch', 'Chemical'),
-        ('cse', 'Computer Science'),
+        ('IT', 'Information technology'),
+        ('ME', 'Mechanical'),
+        ('CV', 'Civil'),
+        ('EEE', 'Electronics and Electrical'),
+        ('ECE', 'Electronics and Communication'),
+        ('CH', 'Chemical'),
+        ('CSE', 'Computer Science'),
     )
     gender = (
         ('male', 'male'),
@@ -26,7 +26,7 @@ class StudentProfile(models.Model):
     branch = models.CharField(blank=True, choices=branch_choices)
     gender=models.CharField(blank=True, choices=gender,max_length=10)
     cgpa = models.FloatField(validators=[MinValueValidator(0),MaxValueValidator(10)],blank=False,help_text='*required')
-    
+    degree = models.CharField(blank=True,choices=degree_options)
     skills = models.TextField(blank=True)
     bio = models.TextField(blank=True)
     profileimg = models.ImageField(upload_to='student',default='blank_user.png')

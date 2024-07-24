@@ -49,7 +49,7 @@ class StudentProfileForm(forms.ModelForm):
     
     class Meta:
         model = StudentProfile
-        fields = ( 'phone_number','branch','gender','cgpa','skills','bio','profileimg')
+        fields = ( 'phone_number','branch','gender','cgpa','degree','skills','bio','profileimg')
 
     def __init__(self, *args, **kwargs):
         super(StudentProfileForm, self).__init__(*args, **kwargs)
@@ -62,7 +62,10 @@ class StudentProfileForm(forms.ModelForm):
         self.fields['gender'].label = 'Gender'
         self.fields['gender'].widget.attrs.update({'class': 'form-select'})
         self.fields['gender'].label_tag = '<label  class="form-label">%s</label>' % ( self.fields['gender'].label)
-    
+
+        self.fields['degree'].label = 'Choose your degree'
+        self.fields['degree'].widget.attrs.update({'class': 'form-select'})
+        self.fields['degree'].label_tag = '<label  class="form-label">%s</label>' % ( self.fields['degree'].label)    
    
 class CompanyProfileForm(forms.ModelForm):
     hr_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"HR name", "class":"form-control"}), label="")
