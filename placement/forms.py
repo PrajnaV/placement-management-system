@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import StudentProfile, CompanyProfile
+from .models import StudentProfile, CompanyProfile,JobPost
 
 class UserForm(UserCreationForm):
     email = forms.EmailField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Email Address'}))
@@ -89,3 +89,19 @@ class CompanyProfileForm(forms.ModelForm):
         self.fields['type_of_company'].label = 'Company type'
         self.fields['type_of_company'].widget.attrs.update({'class': 'form-select'})
         self.fields['type_of_company'].label_tag = '<label  class="form-label">%s</label>' % ( self.fields['type_of_company'].label)
+
+class CreateJobForm(forms.ModelForm):
+    designation = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Enter designation", "class":"form-control"}), label="")
+    salary = forms.IntegerField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Enter salary in LPA", "class":"form-control"}), label="")
+    bond_years = forms.IntegerField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Enter bond years", "class":"form-control"}), label="")
+    requirement = forms.CharField(required=False,widget=forms.Textarea(attrs={
+            "placeholder": "Requirements",
+            "class": "form-control",
+            "rows": 3
+        }),
+        label=""
+    )
+    closing_date = forms.DateField(required=True,widget=forms.widgets.DateInput(attrs={"placeholder":"yyyy-mm-dd", "class":"form-control"}),label="Enter application closing date")
+    class Meta:
+        model = JobPost
+        fields = ('designation','salary','bond_years','requirement','closing_date')

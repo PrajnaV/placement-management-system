@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator,MinValueValidator
+import datetime
 
 class StudentProfile(models.Model):
     branch_choices = (
@@ -51,3 +52,15 @@ class CompanyProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+class JobPost(models.Model):
+    company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE)
+    designation = models.CharField(max_length=30, blank=False)
+    salary = models.IntegerField(blank=False)
+    bond_years = models.IntegerField(blank=False)
+    created_at = models.DateField(auto_now_add=True)
+    requirement = models.TextField(blank=True)
+    closing_date = models.DateField(blank=True, default=datetime.date(2024, 12, 31))
+
+    def __str__(self):
+        return f"{self.designation} - {self.company.user.username}"

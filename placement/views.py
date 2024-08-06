@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import login
 from django.contrib.auth.models import auth
-from .forms import UserForm, StudentProfileForm, CompanyProfileForm
+from .forms import UserForm, StudentProfileForm, CompanyProfileForm, CreateJobForm
 from django.contrib.auth.decorators import login_required
 
 from .models import *
@@ -94,6 +94,19 @@ def update_studentprofile(request):
         messages.success(request, "Updated successfully !")
         return redirect('update_studentprofile')
     return render(request,'update.html',{'form':form})
+
+@login_required(login_url='login_user')
+def create_job(request):
+    if request.method == 'POST':
+        form = CreateJobForm(request.POST)
+        if form.is_valid():
+            job_post = form.save(commit=False)
+            job_post.company = CompanyProfile.objects.get(user=request.user)
+            job_post.save()
+            return redirect('company_dashboard')  # Redirect to some view after successful submission
+    else:
+        form = CreateJobForm()
+    return render(request,'createjob.html',{'form':form})
 
 @login_required(login_url='login_user')
 def company_dashboard(request):
