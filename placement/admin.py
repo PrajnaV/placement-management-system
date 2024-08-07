@@ -4,3 +4,4 @@ from . models import *
 admin.site.register(StudentProfile)
 admin.site.register(CompanyProfile)
 admin.site.register(JobPost)
+admin.site.register(AppliedJob)

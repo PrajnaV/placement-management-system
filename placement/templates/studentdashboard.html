@@ -2,7 +2,29 @@
 {% load static %}
 
 {% block css %}
-        
+.card{
+  width:70%;
+  margin:auto;
+  border-radius:20px;
+  box-shadow:2px 3px 4px 2px rgba(0,0,0,0.35);
+  margin-top:30px;
+  display:flex;
+  flex-direction:row;
+  padding:30px;
+}  
+.img-container{
+  width:35%;
+  border-right:1px solid black;
+
+}
+img{
+  max-width:80%;
+  
+}
+.content{
+  width:65%;
+  margin-left:20px;
+}
 {% endblock %}
 {% block body %}
 <nav class="navbar navbar-dark bg-dark fixed-top">
@@ -46,6 +68,29 @@
       </div>
     </div>
   </nav>
+  <br>
+  <br>
+  {% for job in job_posts %}
+  <div class="card">
+    <div class="img-container">
+      <img src="{{job.company.logo.url}}" alt="">
+    </div>
+    <div class="content">
+      <h3>{{job.designation}}-{{job.company.user.username}}</h3>
+      <p><b>Package: {{job.salary}} LPA</b><br>
+        <b>Requirements : </b>{{job.requirement}} <br>
+        <b>Bond years : </b>{{job.bond_years}} <br>
+        <b>Start date : </b>{{job.created_at}} <br>
+        <b>Closing date : </b>{{job.closing_date}} <br><br>
+        {% if job.id in applied_jobs %}
+          <button type="button" class="btn btn-secondary" disabled>Applied</button>
+        {% else %}
+        <a href="/applyjob?job_id={{job.id}}"><button type="button" class="btn btn-success">Apply now</button></a>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+  {% endfor %}
 {% endblock %}
 
   

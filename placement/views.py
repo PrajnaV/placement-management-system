@@ -75,7 +75,21 @@ def comp_register(request):
     
 @login_required(login_url='login_user')
 def student_dashboard(request):
-    return render(request,'studentdashboard.html')
+    job_posts = JobPost.objects.all()
+    student = StudentProfile.objects.get(user__username=request.user.username)
+    applied_jobs = AppliedJob.objects.filter(student=student).values_list('job_id', flat=True)
+    return render(request,'studentdashboard.html',{'job_posts':job_posts,'applied_jobs':applied_jobs})
+
+@login_required(login_url='login_user')
+def applyjob(request):
+    student_name = request.user.username
+    job_id = request.GET.get('job_id')
+    student = StudentProfile.objects.get(user__username=student_name)
+    job = JobPost.objects.get(id=job_id)
+    company = job.company 
+    new_application = AppliedJob.objects.create(student=student,job=job,company=company)
+    new_application.save() 
+    return redirect('student_dashboard')
 
 @login_required(login_url='login_user')
 def student_profile_view(request):

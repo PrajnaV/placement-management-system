@@ -64,3 +64,9 @@ class JobPost(models.Model):
 
     def __str__(self):
         return f"{self.designation} - {self.company.user.username}"
+    
+class AppliedJob(models.Model):
+    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE)
+    job = models.ForeignKey(JobPost, on_delete=models.CASCADE)
+    company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE)
+    applied_at = models.DateTimeField(auto_now_add=True)
