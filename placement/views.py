@@ -123,5 +123,24 @@ def create_job(request):
     return render(request,'createjob.html',{'form':form})
 
 @login_required(login_url='login_user')
+def view_applicants(request,job_id):
+    company = CompanyProfile.objects.get(user=request.user)
+    job = JobPost.objects.get(id=job_id, company=company)
+    applicants = AppliedJob.objects.filter(job=job)
+
+    if request.method == "POST":
+        application_id = request.POST.get('applicant_id')
+        status = request.POST.get('status')
+        application = AppliedJob.objects.get(id=application_id)
+        application.status = status
+        application.save()
+        return redirect('view_applicants', job_id=job.id)
+
+    return render(request, 'view_applicants.html', {'job': job, 'applicants': applicants})
+
+
+@login_required(login_url='login_user')
 def company_dashboard(request):
-    return render(request,'companydashboard.html')
+    company_profile = CompanyProfile.objects.get(user=request.user)
+    job_posts = JobPost.objects.filter(company=company_profile)
+    return render(request,'companydashboard.html',{'job_posts':job_posts})

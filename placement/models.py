@@ -66,7 +66,13 @@ class JobPost(models.Model):
         return f"{self.designation} - {self.company.user.username}"
     
 class AppliedJob(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('selected', 'Selected'),
+        ('rejected', 'Rejected'),
+    ]
     student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE)
     job = models.ForeignKey(JobPost, on_delete=models.CASCADE)
     company = models.ForeignKey(CompanyProfile, on_delete=models.CASCADE)
     applied_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
