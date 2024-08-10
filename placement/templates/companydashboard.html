@@ -56,6 +56,14 @@
   <br>
   <br>
   <br>
+  {% if message %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        
+        {{message}}
+       
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
   <div id="jobCarousel" class="carousel slide" >
     <div class="carousel-inner">
       {% for job in job_posts %}
@@ -76,7 +84,12 @@
                     <p class="card-text"><b>Start date:</b> {{ job.created_at }}</p>
                     <p class="card-text"><b>Closing date:</b> {{ job.closing_date }}</p>
                     <a href="/view_applicants/{{job.id}}" class="btn btn-success">View Applicants</a>
-                    <a href=""><button class="btn btn-danger">Delete vacancy</button></a>
+                    <br>
+                    <br>
+                    <form method="POST">
+                      {% csrf_token %}
+                    <button type="submit" name="job_id" value="{{job.id}}"class="btn btn-danger">Delete vacancy</button></a>
+                    </form>
                   </div>
                 </div>
               </div>

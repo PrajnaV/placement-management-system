@@ -94,12 +94,16 @@ img{
           <td>{{applicant.applied_at}}</td>
           <td>{{applicant.status}}</td>
           <td>
+            {% if applicant.status == 'pending' %}
             <form method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="applicant_id" value="{{ applicant.id }}">
                 <button type="submit" name="status" value="shortlisted" class="btn btn-success">Shortlist</button>
                 <button type="submit" name="status" value="rejected" class="btn btn-danger">Reject</button>
             </form>
+            {% elif applicant.status == 'shortlisted'%}
+            <button class="btn btn-primary">Send an email</button>
+            {% endif%}
           </td>
           
         </tr>

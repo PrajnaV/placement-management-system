@@ -149,4 +149,13 @@ def application_status(request):
 def company_dashboard(request):
     company_profile = CompanyProfile.objects.get(user=request.user)
     job_posts = JobPost.objects.filter(company=company_profile)
+    if request.method == "POST":   #to delete job vacancy
+        job_id = request.POST.get('job_id')
+        job=JobPost.objects.get(id=job_id)
+        AppliedJob.objects.filter(job=job).delete()
+        job.delete()
+        company_profile = CompanyProfile.objects.get(user=request.user)
+        job_posts = JobPost.objects.filter(company=company_profile)
+        message = "Deleted successfully!!" 
+        return render(request,'companydashboard.html',{'job_posts':job_posts,'message':message})
     return render(request,'companydashboard.html',{'job_posts':job_posts})
