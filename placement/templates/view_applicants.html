@@ -50,10 +50,7 @@ img{
               </ul>
             </li>
           </ul>
-          <form class="d-flex mt-3" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-success" type="submit">Search</button>
-          </form>
+          
         </div>
       </div>
     </div>
@@ -100,7 +97,7 @@ img{
             <form method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="applicant_id" value="{{ applicant.id }}">
-                <button type="submit" name="status" value="selected" class="btn btn-success">Select</button>
+                <button type="submit" name="status" value="shortlisted" class="btn btn-success">Shortlist</button>
                 <button type="submit" name="status" value="rejected" class="btn btn-danger">Reject</button>
             </form>
           </td>

@@ -1,31 +1,4 @@
-{% extends 'basic.html' %}
-{% load static %}
-
-{% block css %}
-.card{
-  width:70%;
-  margin:auto;
-  border-radius:20px;
-  box-shadow:2px 3px 4px 2px rgba(0,0,0,0.35);
-  margin-top:30px;
-  display:flex;
-  flex-direction:row;
-  padding:30px;
-}  
-.img-container{
-  width:35%;
-  border-right:1px solid black;
-
-}
-img{
-  max-width:80%;
-  
-}
-.content{
-  width:65%;
-  margin-left:20px;
-}
-{% endblock %}
+{% extends 'basic.html'%}
 {% block body %}
 <nav class="navbar navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
@@ -41,13 +14,13 @@ img{
         <div class="offcanvas-body">
           <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/student_dashboard/">Home</a>
+              <a class="nav-link " aria-current="page" href="/student_dashboard/">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/student_profile_view">My Profile</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/application_status/">Application Status</a>
+              <a class="nav-link active" href="/application_status/">Application Status</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -71,30 +44,40 @@ img{
       </div>
     </div>
   </nav>
-  <br>
-  <br>
-  {% for job in job_posts %}
-  <div class="card">
-    <div class="img-container">
-      <img src="{{job.company.logo.url}}" alt="">
-    </div>
-    <div class="content">
-      <h3>{{job.designation}}-{{job.company.user.username}}</h3>
-      <p><b>Package: {{job.salary}} LPA</b><br>
-        <b>Requirements : </b>{{job.requirement}} <br>
-        <b>Bond years : </b>{{job.bond_years}} <br>
-        <b>Start date : </b>{{job.created_at}} <br>
-        <b>Closing date : </b>{{job.closing_date}} <br><br>
-        {% if job.id in applied_jobs %}
-          <button type="button" class="btn btn-secondary" disabled>Applied</button>
-        {% else %}
-        <a href="/applyjob?job_id={{job.id}}"><button type="button" class="btn btn-success">Apply now</button></a>
-        {% endif %}
-      </p>
-    </div>
-  </div>
-  {% endfor %}
-{% endblock %}
+  <br><br><br>
+  <div class="container">
 
+    <table class="table table-dark table-hover table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Job</th>
+          <th scope="col">Company</th>
+          <th scope="col">Application date</th>
+          <th scope="col">Status</th>
+          
+          
+        </tr>
+      </thead>
+      {% if applications %}
+    {% for application in applications %}
+      <tbody class="table table-striped">
+        <tr>
+          <th scope="row">
+            {{application.id}}
+          </th>
+          <td>{{application.job.designation}}</td>
+          <td>{{application.company.user}}</td>
+          <td>{{application.applied_at}}</td>
+          <td>{{application.status}}</td>
+          
+        </tr>
+        
+      </tbody>
+      {% endfor%}
+  {% endif %}
   
-  
+    </table>
+
+  </div> 
+{% endblock %}

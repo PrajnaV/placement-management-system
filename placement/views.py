@@ -138,6 +138,12 @@ def view_applicants(request,job_id):
 
     return render(request, 'view_applicants.html', {'job': job, 'applicants': applicants})
 
+@login_required(login_url='login_user')
+def application_status(request):
+    student = StudentProfile.objects.get(user=request.user)
+    applications = AppliedJob.objects.filter(student=student)
+
+    return render(request, 'application_status.html', {'applications': applications})
 
 @login_required(login_url='login_user')
 def company_dashboard(request):
